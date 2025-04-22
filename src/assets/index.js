@@ -29,6 +29,9 @@ import tesla from "./company/tesla.png";
 import carrent from "./carrent.png";
 import jobit from "./jobit.jpg";
 import tripguide from "./tripguide.png";
+import gebeyax from "./gebeyax.png";
+import bingo from "./bingo.png";
+import realestate from "./realestate.jpg";
 
 export {
   logo,
@@ -59,4 +62,7 @@ export {
   carrent,
   jobit,
   tripguide,
+  gebeyax,
+  bingo,
+  realestate,
 };

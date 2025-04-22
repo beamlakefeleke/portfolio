@@ -1,68 +1,53 @@
 import React from "react";
-import {Tilt} from "react-tilt";
 import { motion } from "framer-motion";
-
-import { styles } from "../style";
 import { github } from "../assets";
-import { SectionWrapper } from "../hoc";
+import { styles } from "../style";
 import { projects } from "../constants";
 import { fadeIn, textVariant } from "../utils/motion";
+import { SectionWrapper } from "../hoc";
 
-const ProjectCard = ({
-  index,
-  name,
-  description,
-  tags,
-  image,
-  source_code_link,
-}) => {
+const ProjectCard = ({ project, index }) => {
   return (
-    <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
-      <Tilt
-        options={{
-          max: 45,
-          scale: 1,
-          speed: 450,
-        }}
-        className='bg-tertiary p-5 rounded-2xl sm:w-[360px] w-full'
-      >
-        <div className='relative w-full h-[230px]'>
-          <img
-            src={image}
-            alt='project_image'
-            className='w-full h-full object-cover rounded-2xl'
-          />
+    <motion.div
+      variants={fadeIn("right", "spring", index * 0.3, 0.75)}
+      className="min-w-[300px] sm:min-w-[340px] max-w-xs flex-shrink-0 snap-start bg-gradient-to-br from-[#1d1836] to-[#2c234d] rounded-3xl shadow-xl overflow-hidden border border-white/10 hover:shadow-purple-800/30 transition-all duration-500 group"
+    >
+      {/* Project Image */}
+      <div className="relative h-52 overflow-hidden">
+        <img
+          src={project.image}
+          alt={project.name}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      </div>
 
-          <div className='absolute inset-0 flex justify-end m-3 card-img_hover'>
-            <div
-              onClick={() => window.open(source_code_link, "_blank")}
-              className='black-gradient w-10 h-10 rounded-full flex justify-center items-center cursor-pointer'
-            >
-              <img
-                src={github}
-                alt='source code'
-                className='w-1/2 h-1/2 object-contain'
-              />
-            </div>
-          </div>
+      {/* Project Content */}
+      <div className="p-5 text-white flex flex-col justify-between h-60">
+        <div>
+          <h3 className="text-xl font-bold">{project.name}</h3>
+          <p className="text-sm text-gray-300 mt-2 line-clamp-3">{project.description}</p>
         </div>
 
-        <div className='mt-5'>
-          <h3 className='text-white font-bold text-[24px]'>{name}</h3>
-          <p className='mt-2 text-secondary text-[14px]'>{description}</p>
-        </div>
-
-        <div className='mt-4 flex flex-wrap gap-2'>
-          {tags.map((tag) => (
-            <p
-              key={`${name}-${tag.name}`}
-              className={`text-[14px] ${tag.color}`}
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span
+              key={tag.name}
+              className={`px-2 py-1 text-xs font-medium rounded-full bg-white/10 ${tag.color}`}
             >
               #{tag.name}
-            </p>
+            </span>
           ))}
         </div>
-      </Tilt>
+
+        <button
+          onClick={() => window.open(project.source_code_link, "_blank")}
+          className="mt-4 flex items-center gap-2 px-4 py-2 rounded-full bg-[#915EFF] hover:bg-[#7a3eff] transition-all text-sm font-semibold"
+        >
+          <img src={github} alt="github" className="w-4 h-4" />
+          View Code
+        </button>
+      </div>
     </motion.div>
   );
 };
@@ -70,31 +55,27 @@ const ProjectCard = ({
 const Works = () => {
   return (
     <>
-      <motion.div variants={textVariant()}>
-        <p className={`${styles.sectionSubText} `}>My work</p>
-        <h2 className={`${styles.sectionHeadText}`}>Projects.</h2>
+      <motion.div variants={textVariant()} className="text-center mb-10">
+        <p className={`${styles.sectionSubText} text-gray-400`}>Things I've Built</p>
+        <h2 className={`${styles.sectionHeadText} text-white`}>Projects Portfolio</h2>
       </motion.div>
 
-      <div className='w-full flex'>
-        <motion.p
-          variants={fadeIn("", "", 0.1, 1)}
-          className='mt-3 text-secondary text-[17px] max-w-3xl leading-[30px]'
-        >
-          Following projects showcases my skills and experience through
-          real-world examples of my work. Each project is briefly described with
-          links to code repositories and live demos in it. It reflects my
-          ability to solve complex problems, work with different technologies,
-          and manage projects effectively.
-        </motion.p>
-      </div>
+      <motion.p
+        variants={fadeIn("", "", 0.1, 1)}
+        className="text-center text-gray-300 text-lg max-w-4xl mx-auto leading-7 mb-12"
+      >
+        Explore a collection of my favorite work, spanning full-stack web development, interactive UIs, and mobile apps built with passion and precision.
+      </motion.p>
 
-      <div className='mt-20 flex flex-wrap gap-7'>
-        {projects.map((project, index) => (
-          <ProjectCard key={`project-${index}`} index={index} {...project} />
-        ))}
+      <div className="overflow-x-auto pb-4">
+        <div className="flex gap-6 px-4 sm:px-8 snap-x snap-mandatory overflow-y-hidden">
+          {projects.map((project, index) => (
+            <ProjectCard key={`project-${index}`} index={index} project={project} />
+          ))}
+        </div>
       </div>
     </>
   );
 };
 
-export default SectionWrapper(Works, "");
+export default SectionWrapper(Works, "projects");
