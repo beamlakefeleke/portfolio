@@ -20,6 +20,11 @@ import redux from "./tech/redux.png";
 import tailwind from "./tech/tailwind.png";
 import typescript from "./tech/typescript.png";
 import threejs from "./tech/threejs.svg";
+import django from "./tech/django.png";
+import flutter from "./tech/flutter.png";
+import nextjs from "./tech/nextjs.png";
+import laravel from "./tech/laravel.png";
+import supabase from "./tech/supabase.png";
 
 import meta from "./company/meta.png";
 import shopify from "./company/shopify.png";
@@ -65,4 +70,9 @@ export {
   gebeyax,
   bingo,
   realestate,
+  django,
+  laravel,
+  flutter,
+  nextjs,
+  supabase,
 };

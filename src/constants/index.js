@@ -26,6 +26,11 @@ import {
     gebeyax,
     bingo,
     realestate,
+    django,
+    laravel,
+    nextjs,
+    flutter,
+    supabase
   } from "../assets";
   
   export const navLinks = [
@@ -92,8 +97,8 @@ import {
       icon: reactjs,
     },
     {
-      name: "Redux Toolkit",
-      icon: redux,
+      name: "Laravel",
+      icon: laravel,
     },
     {
       name: "Tailwind CSS",
@@ -121,7 +126,27 @@ import {
     },
     {
       name: "Flutter",
-      icon: mobile,
+      icon: flutter,
+    },
+    {
+      name:"Nextjs",
+      icon: nextjs,
+    },
+    {
+      name:"Redux Toolkit",
+      icon: redux,
+    },
+    {
+      name: "Django",
+      icon: django,
+    },
+    {
+      name: "Supabase",
+      icon: supabase,
+    },
+    {
+      name: "Docker",
+      icon: docker,
     },
   ];
   
