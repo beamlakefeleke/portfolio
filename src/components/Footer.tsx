@@ -1,76 +1,46 @@
 import React from 'react';
-import { HeartIcon, ArrowUpIcon } from 'lucide-react';
+import { ArrowUpIcon } from 'lucide-react';
+
 const navLinks = [
-{
-  name: 'About',
-  href: '#about'
-},
-{
-  name: 'Experience',
-  href: '#experience'
-},
-{
-  name: 'Tech Stack',
-  href: '#tech'
-},
-{
-  name: 'Projects',
-  href: '#projects'
-}];
+  { name: 'About',      href: '#about' },
+  { name: 'Experience', href: '#experience' },
+  { name: 'Stack',      href: '#tech' },
+  { name: 'Projects',   href: '#projects' },
+  { name: 'Contact',    href: '#contact' },
+];
 
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
+  const year = new Date().getFullYear();
   return (
-    <footer className="relative z-10 mt-12 bg-secondary/30 backdrop-blur-md">
-      {/* Animated Gradient Top Border */}
-      <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-accent to-transparent opacity-50" />
+    <footer className="border-t themed-border themed-bg" style={{ borderColor: 'var(--color-divider)' }}>
+      <div className="max-w-7xl mx-auto px-6 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+        <span className="font-display text-lg text-paper">
+          B<span className="text-amber">.</span>
+        </span>
 
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
-          <div className="flex items-center gap-2">
-            <span className="font-black text-2xl tracking-tight text-white">
-              Bamlake<span className="text-accent">.</span>
-            </span>
-          </div>
-
-          {/* Repeated Nav Links */}
-          <div className="flex flex-wrap justify-center gap-6">
-            {navLinks.map((link) =>
+        <nav className="flex flex-wrap justify-center gap-6" aria-label="Footer navigation">
+          {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className="text-sm font-medium text-text-muted hover:text-accent-pink transition-colors">
-              
-                {link.name}
-              </a>
-            )}
-          </div>
+              className="text-xs font-mono text-muted hover:text-paper transition-colors uppercase tracking-wider"
+            >
+              {link.name}
+            </a>
+          ))}
+        </nav>
 
-          {/* Back to Top Button */}
+        <div className="flex items-center gap-6">
+          <p className="text-xs font-mono text-muted">© {year} Bamlake Feleke</p>
           <button
-            onClick={scrollToTop}
-            className="w-12 h-12 rounded-full glass flex items-center justify-center hover:bg-accent hover:border-accent hover:text-white text-text-muted transition-all duration-300 group shadow-lg"
-            aria-label="Scroll to top">
-            
-            <ArrowUpIcon className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="w-9 h-9 flex items-center justify-center border border-muted/25 rounded-sm text-muted hover:border-amber hover:text-amber transition-colors"
+            aria-label="Scroll to top"
+          >
+            <ArrowUpIcon className="w-4 h-4" />
           </button>
         </div>
-
-        <div className="h-[1px] w-full bg-white/5 mb-8" />
-
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-text-muted text-sm font-medium tracking-wide">
-            © {currentYear} Bamlake Feleke. All rights reserved.
-          </p>
-
-        </div>
       </div>
-    </footer>);
-
+    </footer>
+  );
 }

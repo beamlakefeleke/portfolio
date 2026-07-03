@@ -1,5 +1,5 @@
 /* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 /* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
 @import 'tailwindcss/base';
@@ -9,97 +9,153 @@
 /* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
 
 @layer utilities {
-  .glass {
-    @apply bg-white/[0.04] backdrop-blur-xl border border-white/[0.08];
+  .themed-bg      { background-color: var(--color-bg); }
+  .themed-surface { background-color: var(--color-surface); }
+  .themed-text    { color: var(--color-text); }
+  .themed-muted   { color: var(--color-muted); }
+  .themed-border  { border-color: var(--color-divider); }
+  .themed-divider { background-color: var(--color-divider); }
+
+  .marquee {
+    animation: marquee-scroll 25s linear infinite;
   }
-  .glass-strong {
-    @apply bg-secondary/80 backdrop-blur-2xl border border-accent/20 shadow-[0_0_20px_rgba(145,94,255,0.15)];
-  }
-  .gradient-text {
-    @apply text-transparent bg-clip-text bg-gradient-to-r from-accent to-accent-pink;
-  }
-  .glow-purple {
-    @apply shadow-[0_0_20px_rgba(145,94,255,0.3)];
-  }
-  .glow-purple-strong {
-    @apply shadow-[0_0_40px_rgba(145,94,255,0.5)];
-  }
-  .bg-grid {
-    background-size: 40px 40px;
-    background-image: 
-      linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  }
-  .code-block {
-    @apply font-mono text-sm leading-relaxed;
-  }
-  .section-animate {
-    @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
-  }
-  .section-animate.is-visible {
-    @apply opacity-100 translate-y-0;
-  }
-  /* NEW UTILITIES */
-  .noise-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.04;
-    mix-blend-mode: overlay;
-  }
-  .gradient-border {
-    position: relative;
-    background: theme('colors.secondary');
-    background-clip: padding-box;
-    border: 1px solid transparent;
-  }
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-    z-index: -1;
-    margin: -1px;
-    border-radius: inherit;
-    background: conic-gradient(from 0deg, theme('colors.accent'), theme('colors.accent-pink'), theme('colors.accent'));
-    animation: gradient-rotate 3s linear infinite;
-  }
-  .card-3d {
-    perspective: 1000px;
-    transform-style: preserve-3d;
-  }
-  .typing-cursor {
-    border-right: 2px solid theme('colors.accent-pink');
-    animation: blink 1s step-end infinite;
-  }
-  .glow-line {
-    @apply h-[1px] w-full bg-gradient-to-r from-transparent via-accent/50 to-transparent shadow-[0_0_10px_rgba(145,94,255,0.5)];
-  }
-  .text-shadow-glow {
-    text-shadow: 0 0 20px rgba(145, 94, 255, 0.5);
+  @keyframes marquee-scroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 }
-@keyframes gradient-rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+
+/* ─── CSS custom properties ─────────────────────────────── */
+:root {
+  --color-bg:      #0F0F0F;
+  --color-surface: #1C1C1C;
+  --color-text:    #F0EBE1;
+  --color-muted:   #5E5E5E;
+  --color-divider: rgba(94, 94, 94, 0.2);
+  --color-amber:   #C8A96E;
 }
-@keyframes blink {
-  0%, 100% { border-color: transparent; }
-  50% { border-color: theme('colors.accent-pink'); }
+
+html.light {
+  --color-bg:      #F0EBE1;
+  --color-surface: #E4DDD2;
+  --color-text:    #0F0F0F;
+  --color-muted:   #7A7269;
+  --color-divider: rgba(122, 114, 105, 0.25);
 }
-html {
-  scroll-behavior: smooth;
-}
+
+/* ─── Base ───────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
 body {
-  @apply bg-primary text-white font-sans antialiased overflow-x-hidden;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  @apply font-body antialiased overflow-x-hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+
+/* ─── Light mode overrides for every Tailwind token ─────── */
+/*
+   Tailwind compiles color classes to static values.
+   We override them here under html.light so every
+   text-paper, text-muted, bg-ink, bg-surface etc.
+   flips correctly without touching component markup.
+*/
+
+/* Text colors */
+html.light .text-paper  { color: var(--color-text) !important; }
+html.light .text-muted  { color: var(--color-muted) !important; }
+html.light .text-ink    { color: var(--color-bg) !important; }
+
+/* Background colors */
+html.light .bg-ink      { background-color: var(--color-bg) !important; }
+html.light .bg-surface  { background-color: var(--color-surface) !important; }
+html.light .bg-paper    { background-color: var(--color-text) !important; }
+
+/* hover: text */
+html.light .hover\:text-paper:hover { color: var(--color-text) !important; }
+html.light .hover\:text-amber:hover { color: var(--color-amber) !important; }
+html.light .hover\:bg-paper:hover   { background-color: var(--color-text) !important; }
+
+/* group-hover: text — covers tech tags, nav links, project links */
+html.light .group:hover .group-hover\:text-paper { color: var(--color-text) !important; }
+
+/* Tech stack hover — text-paper on hover */
+html.light .hover\:text-paper:hover { color: var(--color-text) !important; }
+
+/* Border opacity variants */
+html.light .border-muted\/10 { border-color: rgba(122,114,105,0.15) !important; }
+html.light .border-muted\/20 { border-color: rgba(122,114,105,0.25) !important; }
+html.light .border-muted\/25 { border-color: rgba(122,114,105,0.30) !important; }
+html.light .border-muted\/30 { border-color: rgba(122,114,105,0.35) !important; }
+html.light .border-muted\/40 { border-color: rgba(122,114,105,0.45) !important; }
+
+/* Contact section card values (text-paper on email/phone) */
+html.light p.text-paper,
+html.light span.text-paper,
+html.light h1.text-paper,
+html.light h2.text-paper,
+html.light h3.text-paper,
+html.light a.text-paper { color: var(--color-text) !important; }
+
+/* Button hover states — "See my work" / "Get in touch" */
+html.light a.hover\:bg-paper:hover  { background-color: var(--color-text) !important; }
+html.light button.hover\:bg-paper:hover { background-color: var(--color-text) !important; }
+
+/* Contact form send button — bg-amber text-ink stays consistent, hover:bg-paper flips to light bg */
+html.light .bg-amber       { background-color: #C8A96E; }
+html.light .text-ink       { color: #0F0F0F; }
+
+/* Experience: active button state */
+html.light .themed-surface { background-color: var(--color-surface) !important; }
+html.light .themed-text    { color: var(--color-text) !important; }
+html.light .themed-muted   { color: var(--color-muted) !important; }
+
+/* Stats display numbers in hero */
+html.light .font-display.text-paper { color: var(--color-text) !important; }
+
+/* ─── Focus / a11y ───────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid #C8A96E;
+  outline-offset: 3px;
 }
-::-webkit-scrollbar-track {
-  @apply bg-primary;
+
+/* ─── Reduced motion ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .marquee { animation: none !important; }
 }
-::-webkit-scrollbar-thumb {
-  @apply bg-secondary rounded-full border border-white/10;
+
+/* ─── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background-color: var(--color-bg); }
+::-webkit-scrollbar-thumb { background-color: var(--color-surface); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #C8A96E; }
+
+/* ─── Section divider ────────────────────────────────────── */
+.section-divider {
+  height: 1px;
+  width: 100%;
+  background-color: var(--color-divider);
+  transition: background-color 0.25s ease;
 }
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-accent/50;
+
+/* ─── Marquee border ─────────────────────────────────────── */
+.marquee-wrapper {
+  border-top: 1px solid var(--color-divider);
+  border-bottom: 1px solid var(--color-divider);
+  transition: border-color 0.25s ease;
+}
+
+/* ─── Reveal on scroll ───────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }

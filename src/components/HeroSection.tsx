@@ -1,384 +1,189 @@
-import React, { useEffect, useState, useRef, Children, Component } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { ArrowRightIcon, TerminalIcon } from 'lucide-react';
-const roles = [
-'Full-Stack Developer',
-'Flutter Expert',
-'MERN Specialist',
-'Mobile App Developer'];
+import { useRef } from 'react';
+import { motion } from 'framer-motion';
 
-// Animated Counter Component
-const Counter = ({
-  from,
-  to,
-  duration = 2
+// Marquee ticker — the signature element.
+// Functional: tells the reader exactly what you do at a glance.
+const TICKER_ITEMS = [
+  'Flutter', '·', 'React', '·', 'Node.js', '·', 'NestJS', '·',
+  'TypeScript', '·', 'MongoDB', '·', 'Next.js', '·', 'Firebase', '·',
+  'Mobile', '·', 'Full-Stack', '·',
+];
 
+function Marquee() {
+  // Duplicate for seamless loop
+  const items = [...TICKER_ITEMS, ...TICKER_ITEMS];
+  return (
+    <div className="marquee-wrapper overflow-hidden py-3" aria-hidden="true">
+      <div className="flex whitespace-nowrap marquee gap-8 text-sm font-mono text-muted tracking-widest uppercase">
+        {items.map((item, i) => (
+          <span
+            key={i}
+            className={item === '·' ? 'text-amber' : ''}
+          >
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
-
-
-}: {from: number;to: number;duration?: number;}) => {
-  const [count, setCount] = useState(from);
-  const ref = useRef(null);
-  const isInView = useInView(ref, {
-    once: true
-  });
-  useEffect(() => {
-    if (!isInView) return;
-    let startTime: number;
-    let animationFrame: number;
-    const updateCount = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
-      // Ease out cubic
-      const easeProgress = 1 - Math.pow(1 - progress, 3);
-      setCount(Math.floor(easeProgress * (to - from) + from));
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(updateCount);
-      }
-    };
-    animationFrame = requestAnimationFrame(updateCount);
-    return () => cancelAnimationFrame(animationFrame);
-  }, [from, to, duration, isInView]);
-  return <span ref={ref}>{count}</span>;
-};
 export function HeroSection() {
-  const [displayText, setDisplayText] = useState('');
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  // Typing effect logic
-  useEffect(() => {
-    const currentRole = roles[roleIndex];
-    const typeSpeed = isDeleting ? 50 : 100;
-    const pauseTime = 2000;
-    const timer = setTimeout(() => {
-      if (!isDeleting && displayText === currentRole) {
-        setTimeout(() => setIsDeleting(true), pauseTime);
-        return;
-      }
-      if (isDeleting && displayText === '') {
-        setIsDeleting(false);
-        setRoleIndex((prev) => (prev + 1) % roles.length);
-        return;
-      }
-      const nextText = isDeleting ?
-      currentRole.substring(0, displayText.length - 1) :
-      currentRole.substring(0, displayText.length + 1);
-      setDisplayText(nextText);
-    }, typeSpeed);
-    return () => clearTimeout(timer);
-  }, [displayText, isDeleting, roleIndex]);
-  const containerVariants = {
-    hidden: {
-      opacity: 0
-    },
-    visible: {
+  const containerRef = useRef<HTMLElement>(null);
+
+  const container = {
+    hidden: { opacity: 0 },
+    show: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.2
-      }
-    }
-  };
-  const itemVariants = {
-    hidden: {
-      opacity: 0,
-      y: 20
+      transition: { staggerChildren: 0.12, delayChildren: 0.1 },
     },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        ease: 'easeOut'
-      }
-    }
   };
+  const item = {
+    hidden: { opacity: 0, y: 18 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
+  };
+
   return (
     <section
-      className="relative min-h-screen flex items-center pt-20 overflow-hidden"
-      id="home">
-      
-      {/* Decorative Background Elements */}
-      <motion.div
-        animate={{
-          rotate: 360,
-          y: [0, -20, 0]
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'linear'
-        }}
-        className="absolute top-1/4 left-10 w-12 h-12 border border-accent/20 rounded-full opacity-15" />
-      
-      <motion.div
-        animate={{
-          rotate: -360,
-          x: [0, 30, 0]
-        }}
-        transition={{
-          duration: 25,
-          repeat: Infinity,
-          ease: 'linear'
-        }}
-        className="absolute bottom-1/4 left-1/4 w-16 h-16 border border-accent-pink/20 opacity-15"
-        style={{
-          clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'
-        }} />
-      
-      <motion.div
-        animate={{
-          rotate: 180,
-          y: [0, 40, 0]
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: 'linear'
-        }}
-        className="absolute top-1/3 right-1/4 w-10 h-10 border border-blue-500/20 opacity-15" />
-      
+      ref={containerRef}
+      id="home"
+      className="relative min-h-screen flex flex-col justify-between pt-24 pb-0"
+    >
+      {/* Main hero content */}
+      <div className="max-w-7xl mx-auto px-6 w-full flex-1 flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center w-full py-16">
 
-      <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        {/* Left Content */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-start z-10">
-          
+          {/* Left — editorial text block */}
           <motion.div
-            variants={itemVariants}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-6 border-accent/30 shadow-[0_0_15px_rgba(74,222,128,0.1)]">
-            
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
-            </span>
-            <span className="text-sm font-medium text-green-400 tracking-wide">
-              Available for work
-            </span>
-          </motion.div>
-
-          <motion.h1
-            variants={itemVariants}
-            className="text-5xl md:text-7xl font-bold mb-4 tracking-tight leading-tight">
-            
-            Hi, I'm <br />
-            <span className="gradient-text text-shadow-glow">
-              Bamlake Feleke
-            </span>
-          </motion.h1>
-
-          <motion.div
-            variants={itemVariants}
-            className="h-12 mb-6 flex items-center">
-            
-            <p className="text-2xl md:text-3xl font-medium text-text-muted">
-              <span className="text-white">{displayText}</span>
-              <span className="typing-cursor ml-1 inline-block h-[1em] w-[2px] bg-accent-pink align-middle"></span>
-            </p>
-          </motion.div>
-
-          <motion.p
-            variants={itemVariants}
-            className="text-lg text-text-muted max-w-lg mb-10 leading-relaxed">
-            
-            I craft high-performance mobile and web applications. Specializing
-            in Flutter and the MERN stack to bring innovative ideas to life with
-            elegant code and beautiful design.
-          </motion.p>
-
-          <motion.div
-            variants={itemVariants}
-            className="flex flex-wrap items-center gap-4 mb-16">
-            
-            <a
-              href="#projects"
-              className="px-8 py-4 rounded-full bg-gradient-to-r from-accent to-accent-pink text-white font-bold hover:glow-purple-strong transition-all duration-300 flex items-center gap-2 group relative overflow-hidden">
-              
-              <span className="relative z-10 flex items-center gap-2">
-                View My Work
-                <ArrowRightIcon className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            variants={container}
+            initial="hidden"
+            animate="show"
+            className="flex flex-col"
+          >
+            <motion.div variants={item} className="flex items-center gap-3 mb-6">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-400"></span>
               </span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-            </a>
-            <a
-              href="#contact"
-              className="px-8 py-4 rounded-full glass border-white/20 hover:border-accent/50 hover:bg-white/10 text-white font-bold transition-all duration-300 hover:glow-purple">
-              
-              Get In Touch
-            </a>
+              <span className="text-xs font-body font-medium text-green-400 tracking-widest uppercase">
+                Open to work
+              </span>
+            </motion.div>
+
+            <motion.h1
+              variants={item}
+              className="font-display text-6xl md:text-8xl leading-[0.95] tracking-tight mb-6 text-paper"
+            >
+              Bamlake<br />
+              <span className="italic text-amber">Feleke</span>
+            </motion.h1>
+
+            <motion.p
+              variants={item}
+              className="text-lg text-muted leading-relaxed max-w-md mb-8 font-body"
+            >
+              Fullstack developer. I build production mobile
+              apps with Flutter and ship end-to-end web products on the MERN stack.
+              Currently at{' '}
+              <span className="text-paper font-medium">Safaricom Ethiopia</span>,
+              where I own the commercial trade platform from architecture to release.
+            </motion.p>
+
+            <motion.div variants={item} className="flex flex-wrap gap-4">
+              <a
+                href="#projects"
+                className="px-7 py-3.5 bg-amber text-ink font-body font-semibold text-sm tracking-wide rounded-sm hover:bg-paper transition-colors duration-200"
+              >
+                See my work
+              </a>
+              <a
+                href="#contact"
+                className="px-7 py-3.5 border border-muted/40 text-paper font-body font-medium text-sm tracking-wide rounded-sm hover:border-amber hover:text-amber transition-colors duration-200"
+              >
+                Get in touch
+              </a>
+            </motion.div>
+
+            {/* Numeric facts — specific and verifiable */}
+            <motion.div
+              variants={item}
+              className="flex gap-10 mt-14 pt-8 border-t border-muted/20"
+            >
+              {[
+                { value: '4+', label: 'Years shipping' },
+                { value: '23+', label: 'Projects delivered' },
+                { value: '3', label: 'Active clients' },
+              ].map((stat) => (
+                <div key={stat.label}>
+                  <p className="font-display text-4xl text-paper">{stat.value}</p>
+                  <p className="text-xs text-muted uppercase tracking-widest mt-1 font-body">{stat.label}</p>
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
 
-          {/* Stats */}
+          {/* Right — fact card, not code decoration */}
           <motion.div
-            variants={itemVariants}
-            className="grid grid-cols-3 gap-8 w-full max-w-lg border-t border-white/10 pt-8 relative">
-            
-            <div className="absolute top-0 left-0 w-1/3 h-[1px] bg-gradient-to-r from-accent to-transparent" />
-            <div>
-              <h3 className="text-4xl font-black text-white mb-1 flex items-baseline">
-                <Counter from={0} to={4} />
-                <span className="text-accent-pink ml-1">+</span>
-              </h3>
-              <p className="text-sm text-text-muted font-medium uppercase tracking-wider">
-                Years Exp
-              </p>
-            </div>
-            <div>
-              <h3 className="text-4xl font-black text-white mb-1 flex items-baseline">
-                <Counter from={0} to={23} />
-                <span className="text-accent-pink ml-1">+</span>
-              </h3>
-              <p className="text-sm text-text-muted font-medium uppercase tracking-wider">
-                Projects
-              </p>
-            </div>
-            <div>
-              <h3 className="text-4xl font-black text-white mb-1 flex items-baseline">
-                <Counter from={0} to={3} />
-                <span className="text-accent-pink ml-1">+</span>
-              </h3>
-              <p className="text-sm text-text-muted font-medium uppercase tracking-wider">
-                Clients
-              </p>
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
+            className="hidden lg:block"
+          >
+            <div className="themed-surface border themed-border p-8 space-y-7" style={{ borderColor: 'var(--color-divider)' }}>
+
+              {/* What I'm focused on right now */}
+              <div>
+                <p className="text-[10px] font-mono text-amber uppercase tracking-wider mb-4">
+                  What I'm working on
+                </p>
+                <div className="space-y-3">
+                  {[
+                    {
+                      tag: 'Mobile',
+                      text: ' Market sales activities and tracking agents at Safaricom ET',
+                    },
+                    {
+                      tag: 'Web',
+                      text: 'PWA e-commerce platform — Next.js front, NestJS API, Telegram order bot',
+                    },
+                    {
+                      tag: 'ML',
+                      text: 'On-device crop disease detection with TFLite, no internet needed',
+                    },
+                  ].map((item) => (
+                    <div key={item.tag} className="flex gap-3 items-start">
+                      <span className="text-[10px] font-mono text-amber border border-amber/30 px-2 py-0.5 rounded-sm uppercase tracking-wider shrink-0 mt-0.5">
+                        {item.tag}
+                      </span>
+                      <p className="text-sm font-body text-muted leading-snug">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Two concrete numbers that prove range */}
+              <div className="grid grid-cols-2 gap-4 pt-6 border-t border-muted/20">
+                <div>
+                  <p className="font-display text-4xl text-paper">200<span className="text-amber">+</span></p>
+                  <p className="text-xs font-mono text-muted mt-1 leading-tight">
+                    field agents using<br />the Safaricom app
+                  </p>
+                </div>
+                <div>
+                  <p className="font-display text-4xl text-paper">97<span className="text-amber">%</span></p>
+                  <p className="text-xs font-mono text-muted mt-1 leading-tight">
+                    crash-free rate after<br />a delivery app fix
+                  </p>
+                </div>
+              </div>
+
             </div>
           </motion.div>
-        </motion.div>
-
-        {/* Right Content - Code Card */}
-        <motion.div
-          initial={{
-            opacity: 0,
-            scale: 0.9,
-            rotateY: 15
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            rotateY: 0
-          }}
-          transition={{
-            duration: 1,
-            delay: 0.5,
-            type: 'spring'
-          }}
-          className="relative z-10 hidden lg:block perspective-1000">
-          
-          {/* Decorative Ring */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] rounded-full border-2 border-accent/20 border-dashed animate-[spin_20s_linear_infinite] z-0" />
-          <div className="absolute inset-0 bg-gradient-to-tr from-accent/20 to-accent-pink/20 blur-3xl rounded-full z-0" />
-
-          {/* Floating Particles */}
-          {[...Array(5)].map((_, i) =>
-          <div
-            key={i}
-            className={`absolute w-3 h-3 rounded-full blur-[1px] animate-float z-20 ${i % 2 === 0 ? 'bg-accent' : 'bg-accent-pink'}`}
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-              animationDelay: `${i * 0.5}s`,
-              opacity: 0.6
-            }} />
-
-          )}
-
-          <div className="relative glass-strong rounded-2xl overflow-hidden border border-white/10 shadow-2xl animate-float z-10 backdrop-blur-3xl">
-            {/* Mac-like Header */}
-            <div className="bg-secondary/80 px-4 py-3 border-b border-white/5 flex items-center gap-2">
-              <div className="flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-[#ff5f56] shadow-[0_0_5px_#ff5f56]" />
-                <div className="w-3 h-3 rounded-full bg-[#ffbd2e] shadow-[0_0_5px_#ffbd2e]" />
-                <div className="w-3 h-3 rounded-full bg-[#27c93f] shadow-[0_0_5px_#27c93f]" />
-              </div>
-              <div className="ml-4 flex items-center gap-2 text-xs text-text-muted font-mono bg-white/5 px-3 py-1 rounded-md border border-white/5">
-                <TerminalIcon className="w-3 h-3" /> developer.ts
-              </div>
-            </div>
-
-            {/* Code Content */}
-            <div className="p-6 code-block text-sm md:text-base bg-[#0d0d2b]/50">
-              <div className="flex hover:bg-white/5 px-2 -mx-2 rounded transition-colors">
-                <span className="text-text-muted/50 w-8 select-none text-right pr-4">
-                  1
-                </span>
-                <span>
-                  <span className="text-accent-pink">const</span>{' '}
-                  <span className="text-blue-400">developer</span>{' '}
-                  <span className="text-accent-pink">=</span>{' '}
-                  <span className="text-yellow-300">{'{'}</span>
-                </span>
-              </div>
-              <div className="flex hover:bg-white/5 px-2 -mx-2 rounded transition-colors">
-                <span className="text-text-muted/50 w-8 select-none text-right pr-4">
-                  2
-                </span>
-                <span className="ml-4">
-                  <span className="text-cyan-300">name:</span>{' '}
-                  <span className="text-green-400">'Bamlake Feleke'</span>
-                  <span className="text-white">,</span>
-                </span>
-              </div>
-              <div className="flex hover:bg-white/5 px-2 -mx-2 rounded transition-colors">
-                <span className="text-text-muted/50 w-8 select-none text-right pr-4">
-                  3
-                </span>
-                <span className="ml-4">
-                  <span className="text-cyan-300">role:</span>{' '}
-                  <span className="text-green-400">'Full-Stack Developer'</span>
-                  <span className="text-white">,</span>
-                </span>
-              </div>
-              <div className="flex hover:bg-white/5 px-2 -mx-2 rounded transition-colors">
-                <span className="text-text-muted/50 w-8 select-none text-right pr-4">
-                  4
-                </span>
-                <span className="ml-4">
-                  <span className="text-cyan-300">skills:</span>{' '}
-                  <span className="text-purple-400">[</span>
-                  <span className="text-green-400">'Flutter'</span>
-                  <span className="text-white">, </span>
-                  <span className="text-green-400">'MERN'</span>
-                  <span className="text-white">, </span>
-                  <span className="text-green-400">'TypeScript'</span>
-                  <span className="text-purple-400">]</span>
-                  <span className="text-white">,</span>
-                </span>
-              </div>
-              <div className="flex hover:bg-white/5 px-2 -mx-2 rounded transition-colors">
-                <span className="text-text-muted/50 w-8 select-none text-right pr-4">
-                  5
-                </span>
-                <span className="ml-4">
-                  <span className="text-cyan-300">location:</span>{' '}
-                  <span className="text-green-400">
-                    'Addis Ababa, Ethiopia'
-                  </span>
-                  <span className="text-white">,</span>
-                </span>
-              </div>
-              <div className="flex hover:bg-white/5 px-2 -mx-2 rounded transition-colors">
-                <span className="text-text-muted/50 w-8 select-none text-right pr-4">
-                  6
-                </span>
-                <span className="ml-4">
-                  <span className="text-cyan-300">hireable:</span>{' '}
-                  <span className="text-orange-400 font-bold">true</span>
-                </span>
-              </div>
-              <div className="flex hover:bg-white/5 px-2 -mx-2 rounded transition-colors">
-                <span className="text-text-muted/50 w-8 select-none text-right pr-4">
-                  7
-                </span>
-                <span className="text-yellow-300">{'}'}</span>
-                <span className="text-white">;</span>
-                <span className="typing-cursor h-[1.2em] w-[2px] bg-white/50 ml-1 inline-block align-middle"></span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        </div>
       </div>
-    </section>);
 
+      {/* Marquee — signature element, bottom of hero */}
+      <Marquee />
+    </section>
+  );
 }

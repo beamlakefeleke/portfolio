@@ -1,36 +1,46 @@
-
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-  './index.html',
-  './src/**/*.{js,ts,jsx,tsx}'
-],
+    './index.html',
+    './src/**/*.{js,ts,jsx,tsx}'
+  ],
   theme: {
     extend: {
       colors: {
-        primary: '#0a0a1f',
-        secondary: '#1a1a3e',
-        accent: '#915EFF',
-        'accent-pink': '#e879f9',
-        'text-muted': '#9ca3af',
+        ink:     '#0F0F0F',   // near-true black bg — avoids deep-navy AI signature
+        surface: '#1C1C1C',   // card/section surfaces
+        paper:   '#F0EBE1',   // warm off-white — editorial, not cream
+        amber:   '#C8A96E',   // gold accent — zero neon, zero AI
+        muted:   '#5E5E5E',   // secondary text
+        'light-surface': '#E8E3D8', // light mode card surface
+        // legacy aliases kept for any leftover references — map to new tokens
+        primary:      '#0F0F0F',
+        secondary:    '#1C1C1C',
+        accent:       '#C8A96E',
+        'accent-pink':'#C8A96E',
+        'text-muted': '#5E5E5E',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        display: ['"DM Serif Display"', 'Georgia', 'serif'],
+        body:    ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+        mono:    ['"JetBrains Mono"', 'monospace'],
+        // legacy alias
+        sans: ['"Space Grotesk"', 'system-ui', 'sans-serif'],
       },
       animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'spin-slow': 'spin 8s linear infinite',
-        'gradient-rotate': 'gradient-rotate 3s linear infinite',
-        'blink': 'blink 1s step-end infinite',
+        'marquee': 'marquee-scroll 25s linear infinite',
+        'fade-up': 'fade-up 0.6s ease forwards',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-20px)' },
-        }
-      }
+        'marquee-scroll': {
+          '0%':   { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        'fade-up': {
+          '0%':   { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
     },
   },
   plugins: [],
