@@ -111,7 +111,7 @@ export function HeroSection() {
             >
               {[
                 { value: '4+', label: 'Years shipping' },
-                { value: '23+', label: 'Projects delivered' },
+                { value: '13+', label: 'Projects delivered' },
                 { value: '3', label: 'Active clients' },
               ].map((stat) => (
                 <div key={stat.label}>
@@ -164,7 +164,7 @@ export function HeroSection() {
               {/* Two concrete numbers that prove range */}
               <div className="grid grid-cols-2 gap-4 pt-6 border-t border-muted/20">
                 <div>
-                  <p className="font-display text-4xl text-paper">200<span className="text-amber">+</span></p>
+                  <p className="font-display text-4xl text-paper">10k<span className="text-amber">+</span></p>
                   <p className="text-xs font-mono text-muted mt-1 leading-tight">
                     field agents using<br />the Safaricom app
                   </p>

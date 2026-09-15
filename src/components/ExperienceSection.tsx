@@ -9,20 +9,29 @@ const experiences = [
     period: 'Jun 2025 – Present',
     isCurrent: true,
     description:
-      'Full-stack developer on the commercial trade platform used by Safaricom\'s field sales teams across Ethiopia. Own the Flutter mobile client, the Node.js/NestJS API layer, and the PostgreSQL schema — from architecture decisions to production releases.',
+      'Full-stack developer on the commercial trade platform used by Safaricom\'s field sales teams across Ethiopia. Own the Flutter mobile client, the Spring boot API layer, and the PostgreSQL schema — from architecture decisions to production releases.',
   },
   {
     id: 2,
+    company: 'Chronos Fintech',
+    role: 'Flutter Developer',
+    period: '2024 – 2025',
+    isCurrent: false,
+    description:
+      'Built a feature-first Flutter fintech super-app using BLoC, GoRouter, and GetIt DI with a clean repository/use-case architecture. Integrated authenticated REST APIs across three separate backends — Chronos, BlockHub, and Panther AI — covering wallet balances, cards, transfers, FX quotes, crypto trading, NFT portfolios, and AI financial insights. Implemented multi-step onboarding, KYC, biometric auth, and the TickPay BNPL experience with installment plans, rewards, and repayment flows.',
+  },
+  {
+    id: 3,
     company: 'Afriuz',
     role: 'Full-Stack Developer',
     period: 'Aug 2025 – Jan 2026',
     isCurrent: false,
     description:
-      'Built a PWA e-commerce platform: Next.js storefront, NestJS REST API, MongoDB, and a Telegram bot that pushed real-time order notifications to the ops team. Handled everything from DB schema design to deployment on a VPS behind Nginx.',
+      'Built a PWA e-commerce platform: Next.js storefront, NestJS REST API, and a Telegram bot that pushed real-time order notifications to the ops team. Handled everything from DB schema design to deployment on a VPS behind Nginx.',
   },
   {
-    id: 3,
-    company: 'Kehsuid Tech',
+    id: 4,
+    company: 'GebeyaX',
     role: 'Flutter Developer',
     period: 'Jan 2024 – Apr 2025',
     isCurrent: false,
@@ -30,8 +39,8 @@ const experiences = [
       'Built the Kehsuid e-commerce mobile app with Firebase backend and Provider state management. Integrated Chapa payment gateway, implemented real-time inventory tracking, and shipped to both App Store and Play Store.',
   },
   {
-    id: 4,
-    company: 'Kehsuid Tech',
+    id: 5,
+    company: 'GebeyaX',
     role: 'Flutter Developer — Real Estate',
     period: 'Sep 2023 – Dec 2023',
     isCurrent: false,
@@ -39,7 +48,7 @@ const experiences = [
       'Developed a property listing app with GetX state management. Built complex multi-criteria filtering (location, price, property type) and embedded interactive Google Maps for property previews.',
   },
   {
-    id: 5,
+    id: 6,
     company: 'Sixam Mart',
     role: 'Flutter Maintenance',
     period: 'May 2023 – Jun 2024',
